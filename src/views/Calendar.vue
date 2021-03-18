@@ -357,6 +357,7 @@ export default {
     const reservation = day => {
       fetch(`${api_base}/reservation`, {
         method: 'post',
+        mode: 'cors',
         body: JSON.stringify({ user_id, date: day.date })
       }).then(r => r.json())
         .then(json => {
@@ -368,6 +369,7 @@ export default {
     const unreservation = day => {
       fetch(`${api_base}/reservation`, {
         method: 'delete',
+        mode: 'cors',
         body: JSON.stringify({ user_id, date: day.date })
       }).then(r => r.json())
         .then(json => {
