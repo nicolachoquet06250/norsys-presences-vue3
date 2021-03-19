@@ -100,14 +100,7 @@ export default {
     const { presences, updatePresences } = usePresences();
     const { choosen_date } = useChoosenDate();
     const { show_loader, hide_loader } = useLoader();
-
-    // url
-    // const api_base = 'https://norsys-sophia-presence.nicolaschoquet.fr/api';
-
-    // localStorage
-    // const user = JSON.parse(localStorage.getItem('user'));
-    // const { /*token, */id: user_id, email: user_email } = user;
-
+    
     // refs
     const arrival_btn = ref(null);
     const departure_btn = ref(null);

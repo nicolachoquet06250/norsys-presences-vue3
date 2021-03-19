@@ -60,7 +60,6 @@
       const { logged } = useLogged();
       const { loader_visible } = useLoader();
       const { api_base, user } = useImmutables();
-      const { id: user_id } = user.value;
 
       const alert = ref({
         text: '',
@@ -77,6 +76,8 @@
         on_modal_closed();
       }
       const update_password = () => {
+        const { id: user_id } = user.value;
+        
         if (password.value.value !== password2.value.value) {
           password2.value.classList.add('is-invalid');
           alert.value = {

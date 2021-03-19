@@ -7,6 +7,6 @@ export default () => {
         api_base: `${url_base}/api`,
         days: ['', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'],
         months: ['', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-        user: computed(() => JSON.parse(localStorage.getItem('user')))
+        user: computed(() => localStorage.getItem('user') !== null ? JSON.parse(localStorage.getItem('user')) : null)
     };
 };
