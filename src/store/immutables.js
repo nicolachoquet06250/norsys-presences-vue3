@@ -1,7 +1,7 @@
 import { computed } from 'vue';
 
 export default () => {
-    const url_base = 'https://norsys-sophia-presence.nicolaschoquet.fr';
+    const url_base = 'https://norsys-sophia-presence.api.nicolaschoquet.fr';
     return {
         url_base,
         api_base: `${url_base}/api`,
