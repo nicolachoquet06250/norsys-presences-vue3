@@ -93,7 +93,8 @@ export default {
   setup() {
     // hooks
     const $router = useRouter();
-    const { api_base, user: { id: user_id, email: user_email } } = useImmutables();
+    const { api_base, user } = useImmutables();
+    const { id: user_id, email: user_email } = user.value;
 
     // store
     const { presences, updatePresences } = usePresences();
