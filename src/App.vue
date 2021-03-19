@@ -41,7 +41,7 @@
 </template>
 
 <script>
-  import { ref } from "vue";
+  import { ref, onUnmounted } from "vue";
   import { useRouter } from "vue-router";
   import Menu from './components/Menu'
   import Modal from './components/Modal'
@@ -126,6 +126,15 @@
       const toggle_password_field_type = e => {
         e.target.previousElementSibling.setAttribute('type', (e.target.previousElementSibling.getAttribute('type') === 'password' ? 'text' : 'password'));
       };
+      const beforeUnloadHandler = () => {
+        $router.push($router.currentRoute.value.fullPath);
+      };
+
+      window.addEventListener('beforeunload', beforeUnloadHandler);
+
+      onUnmounted(() => {
+        window.removeEventListener('beforeunload', beforeUnloadHandler);
+      })
 
       return {
         password_modal_opened,
