@@ -94,13 +94,16 @@ export default {
     // hooks
     const $router = useRouter();
     const { api_base, user } = useImmutables();
+    if (user.value === null) {
+      $router.push('/login');
+    }
     const { id: user_id, email: user_email } = user.value;
 
     // store
     const { presences, updatePresences } = usePresences();
     const { choosen_date } = useChoosenDate();
     const { show_loader, hide_loader } = useLoader();
-    
+
     // refs
     const arrival_btn = ref(null);
     const departure_btn = ref(null);
