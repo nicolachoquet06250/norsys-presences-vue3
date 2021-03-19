@@ -6,12 +6,20 @@
   <Modal title="Profile" body_title="Modifier mon mot de passe" 
          :opened="password_modal_opened"
          @close="close_password_modal">
+    <div class="row">
+      <div class="col-12 modal-alerts" v-if="alert.show">
+        <div :class="{alert: true, [`alert-${alert.type}`]: true}" role="alert">
+          {{ alert.text }}
+        </div>
+      </div>
+    </div>
+
     <form class="row">
         <div class="col-12 mb-2">
             <div class="input-group">
                 <input type="password" id="password-1" ref="password" placeholder="Mot de passe" class="form-control" />
 
-                <button class="input-group-text fas fa-eye toggle-password"></button>
+                <button class="input-group-text fas fa-eye toggle-password" @click.prevent.stop="toggle_password_field_type"></button>
             </div>
         </div>
 
@@ -19,18 +27,12 @@
             <div class="input-group">
                 <input type="password" id="password-2" ref="password2" placeholder="Confirmer le mot de passe" class="form-control" />
 
-                <button class="input-group-text fas fa-eye toggle-password"></button>
+                <button class="input-group-text fas fa-eye toggle-password" @click.prevent.stop="toggle_password_field_type"></button>
             </div>
         </div>
 
         <div class="col-12 mb-2">
             <button type="submit" class="btn btn-info" @click.prevent.stop="update_password">Modifier</button>
-        </div>
-
-        <div class="col-12 modal-alerts" v-if="alert.show">
-          <div :class="{alert: true, [`alert-${alert.type}`]: true}" role="alert">
-            {{ alert.text }}
-          </div>
         </div>
     </form>
   </Modal>
@@ -57,7 +59,8 @@
       const { opened: password_modal_opened, toggle: toggle_password_modal } = useProfilModal();
       const { logged } = useLogged();
       const { loader_visible } = useLoader();
-      const { api_base, user: { id: user_id } } = useImmutables();
+      const { api_base, user } = useImmutables();
+      const { id: user_id } = user.value;
 
       const alert = ref({
         text: '',
@@ -83,8 +86,12 @@
           }
         } else {
           fetch(`${api_base}/user/password`, {
-            method: 'put',
+            method: 'post',
+            headers: { "Content-Type": 'application/x-www-form-urlencoded' },
             body: JSON.stringify({
+              // PUT real method
+              // @TODO trouver pourquoi les requêtes PUT passent en OPTIONS
+              method: 'put',
               user_id,
               password: password.value.value
             })
@@ -92,7 +99,7 @@
           .then(json => {
             if (json.error) {
               password2.value.classList.remove('is-valid');
-              password2.value.classList.classList.add('is-invalid');
+              password2.value.classList.add('is-invalid');
               
               password.value.classList.remove('is-valid');
               password.value.classList.add('is-invalid');
@@ -116,6 +123,9 @@
           });
         }
       }
+      const toggle_password_field_type = e => {
+        e.target.previousElementSibling.setAttribute('type', (e.target.previousElementSibling.getAttribute('type') === 'password' ? 'text' : 'password'));
+      };
 
       return {
         password_modal_opened,
@@ -128,7 +138,8 @@
         on_modal_opened,
         on_modal_closed,
         close_password_modal,
-        update_password
+        update_password,
+        toggle_password_field_type
       }
     }
   }

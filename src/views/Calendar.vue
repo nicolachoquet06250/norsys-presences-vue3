@@ -277,6 +277,7 @@ import Modal from "../components/Modal";
 import { ref, computed, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router'
 import { useCalendar, useLoader, useImmutables } from '../store';
+
 export default {
   name: "Calendar",
 
@@ -285,28 +286,18 @@ export default {
   setup(props, { emit }) {
     // hooks
     const $router = useRouter()
-    const { api_base, days, months, user: { id: user_id } } = useImmutables()
+    const { api_base, days, months, user } = useImmutables()
+    const { id: user_id } = user.value
 
     // store
     const { calendar, calendar_date, current_date, nb_days, setCalendar, setCalendarDate, setNbDays, registerBankHoliday, getBankHolidayLabel, isBankHoliday } = useCalendar();
     const { loader_visible, show_loader, hide_loader } = useLoader();
-
-    // constants
-    // const { id: user_id } = JSON.parse(localStorage.getItem('user'));
-
-    // urls
-    // const api_base = 'https://norsys-sophia-presence.nicolaschoquet.fr/api';
-  
-    // constantes
-    // const days = ['', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-    // const months = ['', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 
     // refs
     const calendar_modal_opened = ref(false);
     const selected_day_date = ref(new Date());
     const selected_day_reservations = ref([]);
     const selected_day_presences = ref([]);
-    //const show_loader = ref(false);
 
     // computed
     const calendar_keys = computed(() => calendar_date.value.month === 1 
@@ -317,7 +308,6 @@ export default {
     // functions
     const request_calendar = (month = null, year = null) => {
 
-      //show_loader.value = true;
       show_loader();
 
       if (year === null) year = new Date().getFullYear();
@@ -330,7 +320,6 @@ export default {
           setCalendarDate(json.year, json.month);
           setNbDays(json.nb_days.previous, json.nb_days.next);
           hide_loader();
-          //show_loader.value = false;
         })
     }
     const range = (a, b) => [...Array(b - a).keys()].map(i => i + a);
@@ -355,27 +344,40 @@ export default {
       emit('modal-closed');
     };
     const reservation = day => {
+      show_loader();
+
       fetch(`${api_base}/reservation`, {
         method: 'post',
-        mode: 'cors',
+        headers: { "Content-Type": 'application/x-www-form-urlencoded' },
         body: JSON.stringify({ user_id, date: day.date })
       }).then(r => r.json())
         .then(json => {
           if (!json.error) {
-            request_calendar(calendar_date.value.full_current_date.getMonth() + 1, calendar_date.value.full_current_date.getFullYear())
+            request_calendar(calendar_date.value.full_current_date.getMonth() + 1, calendar_date.value.full_current_date.getFullYear());
           }
+
+          hide_loader();
         });
     };
     const unreservation = day => {
+      show_loader();
+
       fetch(`${api_base}/reservation`, {
-        method: 'delete',
-        mode: 'cors',
-        body: JSON.stringify({ user_id, date: day.date })
+        method: 'post',
+        headers: { 
+          "Content-Type": 'application/x-www-form-urlencoded'
+        },
+        body: JSON.stringify({ 
+          // delete real method
+          // @TODO trouver pourquoi les requêtes DELETE passent en OPTIONS
+          method: 'delete', user_id, date: day.date })
       }).then(r => r.json())
         .then(json => {
           if (!json.error) {
-            request_calendar(calendar_date.value.full_current_date.getMonth() + 1, calendar_date.value.full_current_date.getFullYear())
+            request_calendar(calendar_date.value.full_current_date.getMonth() + 1, calendar_date.value.full_current_date.getFullYear());
           }
+
+          hide_loader();
         });
     }
     const toggle_reservation = day => reserved(day) ? unreservation(day) : reservation(day);
@@ -384,13 +386,12 @@ export default {
       return day && (day.external_day || isBankHoliday(day.date)) ? false : build_modal(e)
     };
 
-    request_calendar();
-
     onBeforeMount(() => {
         if (!localStorage.getItem('user')) {
             $router.push('/login')
         }
 
+        request_calendar();
         registerBankHoliday();
     })
 

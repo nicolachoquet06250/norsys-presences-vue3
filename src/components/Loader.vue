@@ -21,7 +21,7 @@ export default {
 
 <style scoped>
     .loader {
-        position: absolute;
+        position: fixed;
         background: rgba(255, 255, 255, .5);
         top: 0;
         bottom: 0;
