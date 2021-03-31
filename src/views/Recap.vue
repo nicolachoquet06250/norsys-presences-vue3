@@ -32,13 +32,8 @@
             // hooks
             const $router = useRouter()
             const { show_loader, hide_loader } = useLoader();
-            const { api_base, user: { token } } = useImmutables();
-
-            // urls
-            // const api_base = 'https://norsys-sophia-presence.nicolaschoquet.fr/api';
-
-            // constantes
-            // const { token } = JSON.parse(localStorage.getItem('user'));
+            const { api_base, user } = useImmutables();
+            const { token } = user.value;
 
             // refs
             const recap = ref({
@@ -54,7 +49,7 @@
                 .then(json => {
                     let content = Object.keys(json.vars).reduce((red, curr) => red.replace(`%${curr}%`, json.vars[curr]), json.content);
                     recap.value.object = json.object;
-                    recap.value.content = content;
+                    recap.value.content = content.replace(/(https:\/\/norsys-sophia-presence\.nicolaschoquet\.fr\/)/g, 'https://norsys-sophia-presence.api.nicolaschoquet.fr/');
 
                     hide_loader();
                 });

@@ -29,7 +29,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo02" ref="menu">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li :class="{
               'nav-item': true,
@@ -131,6 +131,7 @@ export default {
     const page_title = ref(props.page_title);
     const dropdown_aria_expended = ref(false);
     const historique = ref([]);
+    const menu = ref(null);
 
     // functions
     const change_page = ({ link }) => $router.push({ path: link });
@@ -243,6 +244,13 @@ export default {
     const toggle_dropdown = () => {
       dropdown_aria_expended.value = !dropdown_aria_expended.value;
     }
+    const toggle_menu = () => {
+      if (menu.value.classList.contains('show')) {
+        menu.value.classList.remove('show');
+      } else {
+        menu.value.classList.add('show');
+      }
+    };
 
     get_historique();
 
@@ -261,6 +269,7 @@ export default {
         { id: 3, label: 'Récaps hebdo', link: '/recap/list' },
         { id: 4, label: 'Nouveau Récap hebdo', link: '/recap/edit' }
       ],
+      menu,
 
       // COMPUTED
       format_date: computed(() => days[date.value.getDay()] + ' ' + date.value.getDate() + ' ' + months[date.value.getMonth() + 1] + ' ' + date.value.getFullYear()),
@@ -278,7 +287,8 @@ export default {
       previous_month,
       open_profile_modal,
       logout,
-      toggle_dropdown
+      toggle_dropdown,
+      toggle_menu
     }
   }
 }

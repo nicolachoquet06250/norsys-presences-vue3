@@ -20,12 +20,11 @@
                                 id="save_template" 
                                 :class="{btn: true, 'btn-primary': true}"
                                 v-if="action_button.condition()"
-                                @click.prevent.stop="action_button.callback">
+                                @click.prevent.stop="action_button.callback"
+                                :disabled="action_button.disabled && action_button.disabled === true">
                             <i :class="{fas: true, [`fa-${action_button.icon}`]: true}"></i>
 
                             <span :class="{'d-none': true, 'd-md-inline': true, 'mx-1': true}"> {{action_button.label}}</span>
-
-                            {{ action_button.condition() }}
                         </button>
                     </div>
               </div>
@@ -73,7 +72,7 @@
       // hooks
       const $router = useRouter();
 
-      const { loader_visible } = useLoader();
+      const { show_loader, hide_loader } = useLoader();
       const { url_base } = useImmutables();
 
       // refs
@@ -115,12 +114,14 @@
             active: false,
             label: 'Récap Hebdo', 
             callback() {
+                show_loader();
                 fetch(`${url_base}/templates/hebdo.html`)
                 .then(r => r.text())
                 .then(html => {
                     content.value = html;
                     active_template('recap');
                     console.log('récap hebdo')
+                    hide_loader();
                 })
             }
           },
@@ -129,12 +130,13 @@
               active: true,
               label: 'Template Vide',
               callback() {
+                  show_loader();
                   content.value = '';
                   active_template('void');
-                  // templates.value = templates.value.map(e => ({...e, active: e.id === 'void'}));
+                  hide_loader();
               }
           }
-      ])
+      ]);
       const action_buttons = ref([
         {
             label: 'Sauvegarder',
@@ -144,7 +146,15 @@
                 return r;
             }, {active: false}).active,
             callback() {
-                
+                show_loader();
+                fetch(`${url_base}/api/recap/save-template`, {
+                    method: 'post',
+                    mode: 'no-cors',
+                    body: JSON.stringify({
+                        method: 'put',
+                        html: document.querySelector('#editor').innerHTML
+                    })
+                }).then(hide_loader).catch(hide_loader);
             }
         },
         {
@@ -154,9 +164,8 @@
                 if (c.label === 'Récap Hebdo') r = c;
                 return r;
             }, {active: false}).active,
-            callback() {
-                
-            }
+            disabled: true,
+            callback() {}
         }
       ]);
 
@@ -172,7 +181,6 @@
       })
 
       return {
-        loader_visible,
         config,
         content,
         templates,
