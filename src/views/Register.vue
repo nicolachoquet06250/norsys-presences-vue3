@@ -77,18 +77,16 @@
 <script>
   import { ref } from "vue";
   import { useRouter } from "vue-router";
-  import { useLoader } from "../store";
+  import { useLoader, useImmutables } from "../store";
 
   export default {
     name: "Register",
 
     setup() {
-      // urls
-      const api_base = 'https://norsys-sophia-presence.nicolaschoquet.fr/api';
-
       // hooks
       const $router = useRouter();
       const { show_loader, hide_loader } = useLoader();
+      const { api_base } = useImmutables();
 
       // hooks
       const firstname = ref(null);
