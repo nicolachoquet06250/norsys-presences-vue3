@@ -400,7 +400,6 @@ export default {
     
     return {
       // DATA
-      jauge: 10,
       calendar,
       months,
       calendar_date,
