@@ -153,7 +153,7 @@
                                     'btn-sm': true, 
                                     reserved: reserved(day),
                                     'btn-disabled': true
-                                  }" v-if="(day.reservations.length === 5 && !reserved(day)) || day.external_day"
+                                  }" v-if="(day.reservations.length >= jauge && !reserved(day)) || day.external_day"
                                      disabled="disabled"
                                      :hidden="true">
                             <span class="d-none d-md-inline">{{ reserved(day) ? 'Annuler' : 'Réserver' }}</span>
@@ -397,6 +397,7 @@ export default {
 
     return {
       // DATA
+      jauge: 10,
       calendar,
       months,
       calendar_date,
