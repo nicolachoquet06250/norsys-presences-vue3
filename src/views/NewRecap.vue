@@ -57,7 +57,7 @@
   import Wysiwyg from "../components/Wysiwyg";
   import { useLoader, useImmutables } from "../store";
 
-  import 'trumbowyg/plugins/resizimg/resizable-resolveconflict.js';
+  // import 'trumbowyg/plugins/resizimg/resizable-resolveconflict.js';
   import 'jquery-resizable';
   import 'trumbowyg/plugins/resizimg/trumbowyg.resizimg.js';
   import 'trumbowyg/plugins/upload/trumbowyg.upload.js';
