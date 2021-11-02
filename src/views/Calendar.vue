@@ -73,7 +73,7 @@
                                     'btn-sm': true, 
                                     reserved: reserved(day),
                                     'btn-disabled': true
-                                  }" v-if="(day.reservations.length === 5 && !reserved(day)) || day.external_day"
+                                  }" v-if="(day.reservations.length === gauge && !reserved(day)) || day.external_day"
                                      disabled="disabled"
                                      :hidden="true">
                             <span class="d-none d-md-inline">
@@ -395,6 +395,9 @@ export default {
         registerBankHoliday();
     })
 
+    //jauge du nombre de personne authorisé a l'agence
+    const gauge = 8;
+    
     return {
       // DATA
       jauge: 10,
@@ -424,7 +427,8 @@ export default {
       isBankHoliday,
       toggle_build_modal,
       show_loader,
-      hide_loader
+      hide_loader,
+      gauge
     }
   }
 }
