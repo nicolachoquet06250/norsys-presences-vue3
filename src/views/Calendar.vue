@@ -79,7 +79,7 @@
                                      disabled="disabled"
                                      :hidden="true">
                             <span class="d-none d-md-inline">
-                              {{ reserved(day) ? 'Annuler' : 'Réserver('+gauge+')' }}
+                              {{ reserved(day) ? 'Annuler' : 'Réserver' }}
                             </span>
                             
                             <i :class="{
@@ -99,7 +99,7 @@
                                   }"
                                   @click.prevent.stop="toggle_reservation(day)" v-else>
                             <span class="d-none d-md-inline">
-                              {{ reserved(day) ? 'Annuler' : 'Réserver('+gauge+')' }}
+                              {{ reserved(day) ? 'Annuler' : 'Réserver' }}
                             </span>
 
                             <i :class="{
@@ -158,7 +158,7 @@
                                   }" v-if="(day.reservations.length >= gauge && !reserved(day)) || day.external_day"
                                      disabled="disabled"
                                      :hidden="true">
-                            <span class="d-none d-md-inline">{{ reserved(day) ? 'Annuler' : 'Réserver('+gauge+')' }}</span>
+                            <span class="d-none d-md-inline">{{ reserved(day) ? 'Annuler' : 'Réserver' }}</span>
                             
                             <i :class="{
                               fas: true, 
@@ -176,7 +176,7 @@
                                     reserved: reserved(day)
                                   }"
                                   @click.prevent.stop="toggle_reservation(day)" v-else>
-                            <span class="d-none d-md-inline">{{ reserved(day) ? 'Annuler' : 'Réserver('+gauge+')' }}</span>
+                            <span class="d-none d-md-inline">{{ reserved(day) ? 'Annuler' : 'Réserver' }}</span>
 
                             <i :class="{
                                   fas: true, 
