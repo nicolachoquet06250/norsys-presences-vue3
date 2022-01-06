@@ -97,7 +97,7 @@
                                   }"
                                   @click.prevent.stop="toggle_reservation(day)" v-else>
                             <span class="d-none d-md-inline">
-                              {{ reserved(day) ? 'Annuler' : 'Réserver' }}
+                              {{ reserved(day) ? 'Annuler' : 'Réserver('+gauge+')' }}
                             </span>
 
                             <i :class="{
@@ -156,7 +156,7 @@
                                   }" v-if="(day.reservations.length >= jauge && !reserved(day)) || day.external_day"
                                      disabled="disabled"
                                      :hidden="true">
-                            <span class="d-none d-md-inline">{{ reserved(day) ? 'Annuler' : 'Réserver' }}</span>
+                            <span class="d-none d-md-inline">{{ reserved(day) ? 'Annuler' : 'Réserver('+gauge+')' }}</span>
                             
                             <i :class="{
                               fas: true, 
@@ -174,7 +174,7 @@
                                     reserved: reserved(day)
                                   }"
                                   @click.prevent.stop="toggle_reservation(day)" v-else>
-                            <span class="d-none d-md-inline">{{ reserved(day) ? 'Annuler' : 'Réserver' }}</span>
+                            <span class="d-none d-md-inline">{{ reserved(day) ? 'Annuler' : 'Réserver('+gauge+')' }}</span>
 
                             <i :class="{
                                   fas: true, 
