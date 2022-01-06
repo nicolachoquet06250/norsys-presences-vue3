@@ -77,7 +77,7 @@
                                      disabled="disabled"
                                      :hidden="true">
                             <span class="d-none d-md-inline">
-                              {{ reserved(day) ? 'Annuler' : 'Réserver' }}
+                              {{ reserved(day) ? 'Annuler' : 'Réserver('+gauge+')' }}
                             </span>
                             
                             <i :class="{
