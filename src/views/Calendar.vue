@@ -398,7 +398,7 @@ export default {
     })
 
     //jauge du nombre de personne authorisé a l'agence
-    const gauge = 5;
+    const gauge = 8;
     
     return {
       // DATA
